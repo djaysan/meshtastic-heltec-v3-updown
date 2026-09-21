@@ -51,14 +51,16 @@ All inputs use the ESP32's internal pull-ups and trigger on the falling edge, so
 
 | Signal | Heltec V3 pin | Wire in the photo |
 |---|---|---|
-| Toggle up | GPIO 26 | blue |
-| Toggle down | GPIO 19 | green |
-| Toggle push | GPIO 20 | yellow |
-| Toggle common | GND | |
+| Toggle up | GPIO 26 | orange |
+| Toggle down | GPIO 19 | yellow |
+| Toggle push | GPIO 20 | green |
+| Toggle common | GND | blue |
 | Buzzer + | GPIO 47 | red |
-| Buzzer − | GND | black |
+| Buzzer - | GND | black |
 
-GPIO 19 and 20 are free on the Heltec V3 because USB goes through the CP2102 bridge, not the native USB pins. GPIO 47 sits on the left header next to 33. Wire colours are what this build used, use whatever you have.
+GPIO 19 and 20 are free on the Heltec V3 because USB goes through the CP2102 bridge, not the native USB pins. Wire colours are what this build used, use whatever you have.
+
+If you think you soldered to a pad marked 22, look again. The ESP32-S3 has no GPIO 22, 23, 24 or 25, they are missing from the chip's pin numbering, and the pad next to that row is 26.
 
 ## Build
 
