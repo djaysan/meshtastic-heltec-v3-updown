@@ -12,7 +12,7 @@ export const DEFAULT_RINGTONE = '24:d=32,o=5,b=565:f6,p,f6,4p,p,f6,p,f6,2p,p,b6,
 
 const RAW_TUNES = [
   // Whatever the node already plays out of the box.
-  { name: 'Meshtastic default', rtttl: DEFAULT_RINGTONE },
+  { name: '24 CTU ring (Meshtastic default)', rtttl: DEFAULT_RINGTONE },
 
   // Short classics, all widely circulated as RTTTL ringtones.
   { name: 'Nokia style', rtttl: 'Nokia:d=4,o=5,b=225:8e6,8d6,f#,g#,8c#6,8b,d,e,8b,8a,c#,e,2a' },
