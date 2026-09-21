@@ -31,24 +31,16 @@
   <p class="sub">Meshtastic 2.7.26 with the up/down/select input re-enabled and the side button mapped to presets. Chrome or Edge on desktop, node plugged in over USB.</p>
 
   <section>
-    <h2>Update (keeps your config)</h2>
-    <p>Writes only the app partition. Region, channels, presets and pins stay as they are.</p>
-    <esp-web-install-button manifest="manifest-update.json">
-      <button slot="activate">Update firmware</button>
+    <h2>Flash</h2>
+    <p>Click the button, pick the USB serial port, then choose <strong>Install</strong>. A dialog asks whether to erase the device.</p>
+    <p><strong>Leave "Erase device" unticked</strong> to keep your config: region, channels, presets, pins, name. The image refreshes bootloader, partition table and app only.</p>
+    <p class="warn">Tick "Erase device" only for a blank or bricked board. Everything on it is wiped and you reconfigure from scratch.</p>
+    <esp-web-install-button manifest="manifest.json">
+      <button slot="activate">Flash firmware</button>
       <span slot="unsupported">Your browser has no Web Serial. Use Chrome or Edge on desktop.</span>
       <span slot="not-allowed">Open this page over HTTPS.</span>
     </esp-web-install-button>
-    <p>If the dialog offers to erase the device, leave it unticked.</p>
-  </section>
-
-  <section>
-    <h2>Factory install (wipes everything)</h2>
-    <p>Bootloader, partitions and app from address 0. Use this on a blank or bricked board. Tick "erase device" in the dialog. You will need to reconfigure the node afterwards.</p>
-    <esp-web-install-button manifest="manifest-factory.json">
-      <button slot="activate">Factory install</button>
-      <span slot="unsupported">Your browser has no Web Serial. Use Chrome or Edge on desktop.</span>
-      <span slot="not-allowed">Open this page over HTTPS.</span>
-    </esp-web-install-button>
+    <p>Works from any previous version, including 2.6.x, since the bootloader is refreshed along with the app.</p>
   </section>
 
   <section>

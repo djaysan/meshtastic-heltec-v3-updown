@@ -11,13 +11,15 @@ Built for the [Muzi H1 remix case](https://www.printables.com/model/853651-mesht
 
 Browser flasher (Chrome or Edge, USB): **https://djaysan.github.io/meshtastic-heltec-v3-updown/**
 
-- **Update** writes only the app partition at `0x10000`. Config survives.
-- **Factory install** writes bootloader, partitions and app from address 0. Use on a blank board and reconfigure afterwards.
+Click **Flash firmware**, pick the port, choose Install. In the erase dialog:
 
-Command line equivalent of Update:
+- **Leave "Erase device" unticked** to keep your config. The image writes bootloader, partition table and app from address 0 and never touches the settings area. Works from any previous version, 2.6.x included.
+- **Tick "Erase device"** only for a blank or bricked board. Everything is wiped.
+
+Command line equivalent (keeps config):
 
 ```
-esptool --port /dev/cu.usbserial-0001 --baud 921600 write-flash 0x10000 firmware-heltec-v3-2.7.26-updown-update.bin
+esptool --port /dev/cu.usbserial-0001 --baud 921600 write-flash 0x0 firmware-heltec-v3-2.7.26-updown-factory.bin
 ```
 
 Never accept an over-the-air update from the phone app on a patched node. It reinstalls stock firmware and the toggle goes dead again.
@@ -52,8 +54,7 @@ git clone --depth 1 --branch v2.7.26.54e0d8d --recurse-submodules --shallow-subm
 cd firmware
 git apply ../heltec-v3-updown.patch
 pio run -e heltec-v3
-# .pio/build/heltec-v3/firmware-heltec-v3-2.7.26.54e0d8d.bin          -> update image (0x10000)
-# .pio/build/heltec-v3/firmware-heltec-v3-2.7.26.54e0d8d.factory.bin  -> factory image (0x0)
+# .pio/build/heltec-v3/firmware-heltec-v3-2.7.26.54e0d8d.factory.bin  -> flash at 0x0
 ```
 
 The patch touches `variants/esp32s3/heltec_v3/platformio.ini` (one build flag) and `src/input/InputBroker.cpp` (side button mapping, guarded by `HELTEC_V3`). It should apply to nearby releases with little or no change.
