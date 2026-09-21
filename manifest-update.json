@@ -1,0 +1,13 @@
+{
+  "name": "Meshtastic Heltec V3 up/down toggle build",
+  "version": "2.7.26-updown",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        { "path": "firmware-heltec-v3-2.7.26-updown-update.bin", "offset": 65536 }
+      ]
+    }
+  ]
+}

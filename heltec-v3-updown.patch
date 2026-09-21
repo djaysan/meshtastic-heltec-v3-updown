@@ -1,0 +1,30 @@
+diff --git a/src/input/InputBroker.cpp b/src/input/InputBroker.cpp
+index c84eb2c..5a942ce 100644
+--- a/src/input/InputBroker.cpp
++++ b/src/input/InputBroker.cpp
+@@ -324,8 +324,15 @@ void InputBroker::Init()
+             BaseType_t higherWake = 0;
+             concurrency::mainDelay.interruptFromISR(&higherWake);
+         };
++#if defined(HELTEC_V3) && defined(INPUTDRIVER_ENCODER_TYPE)
++        // ponytail: toggle already does next/prev/menu, so the side button becomes a preset shortcut.
++        // ALT_LONG opens the canned list (broadcast) when idle and closes it when open; BACK exits any menu/list.
++        userConfig.singlePress = INPUT_BROKER_ALT_LONG;
++        userConfig.longPress = INPUT_BROKER_BACK;
++#else
+         userConfig.singlePress = INPUT_BROKER_USER_PRESS;
+         userConfig.longPress = INPUT_BROKER_SELECT;
++#endif
+         userConfig.longPressTime = 500;
+         userConfig.longLongPress = INPUT_BROKER_SHUTDOWN;
+         UserButtonThread->initButton(userConfig);
+diff --git a/variants/esp32s3/heltec_v3/platformio.ini b/variants/esp32s3/heltec_v3/platformio.ini
+index 2f53c87..071d3bd 100644
+--- a/variants/esp32s3/heltec_v3/platformio.ini
++++ b/variants/esp32s3/heltec_v3/platformio.ini
+@@ -17,4 +17,5 @@ board_build.partitions = default_8MB.csv
+ build_flags = 
+   ${esp32s3_base.build_flags}
+   -D HELTEC_V3
++  -D INPUTDRIVER_ENCODER_TYPE=2
+   -I variants/esp32s3/heltec_v3

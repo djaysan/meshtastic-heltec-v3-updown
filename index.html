@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Heltec V3 Toggle Flasher</title>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<style>
+  :root { color-scheme: light dark; --fg: #1a1a1a; --bg: #fafafa; --muted: #666; --card: #fff; --line: #ddd; --accent: #2a7f62; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #121212; --muted: #aaa; --card: #1c1c1c; --line: #333; --accent: #4cc39a; } }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 28px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px; margin-bottom: 18px; }
+  h2 { font-size: 1.1rem; margin: 0 0 8px; }
+  p { margin: 8px 0; }
+  button { background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 12px 20px; font-size: 1rem; cursor: pointer; }
+  button:hover { filter: brightness(1.1); }
+  .warn { color: #b3261e; font-weight: 600; }
+  code { background: rgba(127,127,127,.15); padding: 1px 5px; border-radius: 4px; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Heltec V3 toggle firmware</h1>
+  <p class="sub">Meshtastic 2.7.26 with the up/down/select input re-enabled and the side button mapped to presets. Chrome or Edge on desktop, node plugged in over USB.</p>
+
+  <section>
+    <h2>Update (keeps your config)</h2>
+    <p>Writes only the app partition. Region, channels, presets and pins stay as they are.</p>
+    <esp-web-install-button manifest="manifest-update.json">
+      <button slot="activate">Update firmware</button>
+      <span slot="unsupported">Your browser has no Web Serial. Use Chrome or Edge on desktop.</span>
+      <span slot="not-allowed">Open this page over HTTPS.</span>
+    </esp-web-install-button>
+    <p>If the dialog offers to erase the device, leave it unticked.</p>
+  </section>
+
+  <section>
+    <h2>Factory install (wipes everything)</h2>
+    <p>Bootloader, partitions and app from address 0. Use this on a blank or bricked board. Tick "erase device" in the dialog. You will need to reconfigure the node afterwards.</p>
+    <esp-web-install-button manifest="manifest-factory.json">
+      <button slot="activate">Factory install</button>
+      <span slot="unsupported">Your browser has no Web Serial. Use Chrome or Edge on desktop.</span>
+      <span slot="not-allowed">Open this page over HTTPS.</span>
+    </esp-web-install-button>
+  </section>
+
+  <section>
+    <h2>Buttons after flashing</h2>
+    <table>
+      <tr><th>Toggle down / up</th><td>Next / previous screen. Inside a menu: next / previous item.</td></tr>
+      <tr><th>Toggle push</th><td>Open the menu for the current screen, or select the highlighted item.</td></tr>
+      <tr><th>Side button, short press</th><td>Open the preset message list (broadcast on the primary channel). Press again to close it.</td></tr>
+      <tr><th>Side button, hold 0.5 s</th><td>Back. Closes any menu or list.</td></tr>
+      <tr><th>Side button, hold 4 s</th><td>Shutdown.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Required node config</h2>
+    <p>Canned messages module enabled, <code>updown1_enabled</code> on, pins A / B / press set to your toggle GPIOs (26 / 19 / 20 on the Muzi H1 remix), and <code>device.button_gpio</code> left at 0.</p>
+    <p class="warn">Never accept an over-the-air update from the phone app. It reinstalls stock firmware and the toggle stops working again.</p>
+    <p>Source, patch and rebuild steps: <a href="https://github.com/djaysan/meshtastic-heltec-v3-updown">github.com/djaysan/meshtastic-heltec-v3-updown</a></p>
+  </section>
+</main>
+</body>
+</html>
