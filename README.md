@@ -36,8 +36,8 @@ Sending a preset: side button, scroll with the toggle, push. Three actions from 
 |---|---|
 | Heltec WiFi LoRa 32 V3 | V3.0 / V3.1. The V3.2 with the helical Bluetooth antenna does not fit this case. |
 | Case | [Muzi H1 remix, 1100 mAh version by LWC](https://www.printables.com/model/853651-meshtastic-muzi-h1-remix-1100mah-version-no-brandi). Print `flipopen + Buzzer + navigation switch TOP`, `flipopen BeltClip BASE` (or the plain base) and `navigation switch protector`. The model's changelog lists the exact switch and buzzer it was designed around. |
-| Navigation switch | 3-way momentary toggle (up / down / push). Part details: TBC. |
-| Buzzer | Passive piezo buzzer, driven with PWM from GPIO 47. Part details: TBC. |
+| Navigation switch | SMD 3-way navigation wheel switch (up / down / push), 12 × 9 mm body, 14.2 mm across the wheel, 2.5 mm tall. Sold on AliExpress as a 3-direction wheel or roller switch. Cut off the two side arms of the wheel so it fits the case, as marked in the model's gallery. |
+| Buzzer | MLT-8530 SMD passive buzzer, 8.5 × 8.5 × 3 mm, 3 V. Passive is required, the firmware drives it with PWM from GPIO 47. |
 | Battery | 3.7 V 1100 mAh LiPo with protection board, JST 1.25 plug for the Heltec. |
 | Antenna | SMA pigtail (u.FL to SMA) and a stubby 868 MHz SMA antenna, up to 10 mm at the base. |
 | Hardware | M3x12 mm screw for the case, M3x0.5 tap for the post. |
