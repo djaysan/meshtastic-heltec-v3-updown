@@ -155,10 +155,11 @@ async function main() {
     return 1;
   } finally {
     try {
-      if (device) {
-        await device.disconnect();
-      } else if (transport) {
-        await transport.disconnect();
+      // The node reboots right after commit, so the library's disconnect can
+      // wait forever for an ack that never comes. Give it three seconds, then move on.
+      const closing = device ? device.disconnect() : transport ? transport.disconnect() : null;
+      if (closing) {
+        await Promise.race([closing, new Promise((resolve) => setTimeout(resolve, 3000))]);
       }
     } catch {
       // The node is rebooting, a failed close here does not matter.
