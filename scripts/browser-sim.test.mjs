@@ -6,6 +6,7 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -59,4 +60,19 @@ test('the built bundle loads in a browser and fills the tune picker', async () =
   const tune = nodes.get('cfg-tune');
   assert.ok(tune, 'the bundle never touched the tune select, so it did not run');
   assert.ok(tune.options.length >= 30, `only ${tune.options.length} tunes were added to the picker`);
+});
+
+test('the built bundle reaches for no Node-only global', () => {
+  // These only bite at runtime, on whichever code path happens to touch them,
+  // so a load test alone is not enough: Buffer.isBuffer sits in the logger and
+  // only fired when the user pressed Apply. esbuild --inject should have
+  // rewritten every free reference, leaving none of these literals behind.
+  const bundle = readFileSync(BUNDLE, 'utf8');
+  for (const forbidden of ['Buffer.isBuffer(', 'process.cwd(', 'process.env', '__dirname']) {
+    assert.equal(
+      bundle.includes(forbidden),
+      false,
+      `the bundle still reaches for ${forbidden}, which a browser does not have`,
+    );
+  }
 });
