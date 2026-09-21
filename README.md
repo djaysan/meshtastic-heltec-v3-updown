@@ -35,7 +35,7 @@ Sending a preset: side button, scroll with the toggle, push. Three actions from 
 | Part | Notes |
 |---|---|
 | Heltec WiFi LoRa 32 V3 | V3.0 / V3.1. The V3.2 with the helical Bluetooth antenna does not fit this case. |
-| Case | [Muzi H1 remix, 1100 mAh version by LWC](https://www.printables.com/model/853651-meshtastic-muzi-h1-remix-1100mah-version-no-brandi). Print the `flipopen + Buzzer + navigation switch TOP` and a `flipopen BASE` (plain or belt clip), plus the `navigation switch protector`. |
+| Case | [Muzi H1 remix, 1100 mAh version by LWC](https://www.printables.com/model/853651-meshtastic-muzi-h1-remix-1100mah-version-no-brandi). Print `flipopen + Buzzer + navigation switch TOP`, `flipopen BeltClip BASE` (or the plain base) and `navigation switch protector`. The model's changelog lists the exact switch and buzzer it was designed around. |
 | Navigation switch | 3-way momentary toggle (up / down / push). Part details: TBC. |
 | Buzzer | Passive piezo buzzer, driven with PWM from GPIO 47. Part details: TBC. |
 | Battery | 3.7 V 1100 mAh LiPo with protection board, JST 1.25 plug for the Heltec. |
@@ -178,5 +178,5 @@ The patch touches `variants/esp32s3/heltec_v3/platformio.ini` (one build flag) a
 
 ## Credits and license
 
-- Case: [Muzi H1 remix by LWC](https://www.printables.com/model/853651-meshtastic-muzi-h1-remix-1100mah-version-no-brandi), remixed from the Muzi Works H1. Photos in this repo are of my own builds.
+- Case: [Muzi H1 remix by LWC](https://www.printables.com/model/853651-meshtastic-muzi-h1-remix-1100mah-version-no-brandi), remixed from the Muzi Works H1, licensed CC BY-NC-SA 4.0. Not included here, download it from Printables. Photos in this repo are of my own builds.
 - Firmware: derived from [meshtastic/firmware](https://github.com/meshtastic/firmware), GPL-3.0. The patch and binaries here are under the same license.
