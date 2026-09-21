@@ -1,0 +1,20 @@
+{
+  "name": "meshtastic-heltec-v3-updown",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser and CLI configuration helpers for the Heltec V3 up/down toggle Meshtastic build",
+  "scripts": {
+    "build": "esbuild src/configure-page.js --bundle --format=esm --minify --target=es2022 --outfile=dist/configure.js --alias:os=./src/shims/node-os.js --alias:path=./src/shims/node-path.js --alias:util=./src/shims/node-util.js",
+    "test": "node --test 'scripts/*.test.mjs'"
+  },
+  "dependencies": {
+    "@meshtastic/core": "2.6.7",
+    "@meshtastic/protobufs": "2.8.0",
+    "@meshtastic/transport-node-serial": "0.0.2",
+    "@meshtastic/transport-web-serial": "0.2.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

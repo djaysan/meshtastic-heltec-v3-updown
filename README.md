@@ -89,6 +89,55 @@ esptool --port /dev/cu.usbserial-0001 --baud 921600 write-flash 0x0 firmware-hel
 
 ## Configure
 
+### Configure from the browser
+
+The flasher page has a **Configure the node** section that pushes all of the settings below over the same USB cable, using Web Serial and the official [Meshtastic JS](https://github.com/meshtastic/js) packages. No phone app, no Python, no OTA.
+
+**https://djaysan.github.io/meshtastic-heltec-v3-updown/**
+
+Fill the form, press **Connect and apply**, pick the port. The page shows a step by step log and ends with *Rebooting, unplug and plug the next node*, so a batch of boards goes through quickly. Everything you type is kept in the browser, so the next node gets the same settings without retyping.
+
+| Field | What it does |
+|---|---|
+| Region, modem preset | `lora.region` and `lora.modem_preset`, with `use_preset` turned on. |
+| Long name, short name | The node owner. Leave empty to keep the name already on the node. |
+| Channel | Keep the channels on the node, or paste a `https://meshtastic.org/e/#...` share link. The first channel in the link becomes the primary, the rest secondary, and the LoRa settings in the link are merged in. |
+| Preset messages | One per line, joined with `\|`. Live counter against the 200 character firmware limit. |
+| Ringtone | Fourteen ready-made RTTTL tunes, or paste your own. **Preview** plays it in the browser first, so you can pick one without writing to the node. 230 character limit. |
+| Toggle | `canned_message.updown1_enabled` plus the three `inputbroker_pin_*` values, and `device.button_gpio` back to 0. |
+| Buzzer | `device.buzzer_gpio` plus the whole external notification module on PWM. |
+| Send bell | `canned_message.send_bell`, so the receiving node beeps. |
+| Timezone | `device.tzdef`, a POSIX TZ string. |
+
+Every field is optional. Anything left empty is left exactly as it is on the node.
+
+It works on any node running Meshtastic 2.6 or newer, flashed from this page or not. Chrome or Edge on desktop, since Web Serial is not in Firefox or Safari.
+
+Two things worth knowing about how it writes:
+
+- `set_config` and `set_module_config` replace a **whole** section. The page always reads the section off the node first, changes only the fields you picked, and sends the complete section back, so nothing else in it gets zeroed.
+- All the writes go inside one `begin_edit_settings` / `commit_edit_settings` transaction, so the node saves and reboots once at the end.
+
+The same logic runs from the command line, against a node plugged into this machine:
+
+```
+npm install
+node scripts/apply-node.mjs --port /dev/cu.usbserial-0001 --options scripts/options-example.json
+```
+
+`scripts/options-example.json` holds this build's defaults: EU_868, LONG_FAST, toggle on 26 / 19 / 20, buzzer on 47, send bell, CET with daylight saving and sixteen preset messages. Copy it, edit it, point `--options` at your copy. `--dry-run` prints the steps without touching a port, and `--help` lists the options file fields.
+
+Rebuild the browser bundle after changing anything in `src/`:
+
+```
+npm run build   # esbuild src/configure-page.js -> dist/configure.js
+npm test        # node --test, no hardware needed
+```
+
+`dist/configure.js` is committed, because GitHub Pages serves static files and never runs a build.
+
+### Configure from the phone app or the Python CLI
+
 Set these once per node, from the phone app (Module config → Canned messages, Module config → External notification, Device) or with the [Meshtastic CLI](https://meshtastic.org/docs/software/python/cli/):
 
 ```
@@ -113,6 +162,7 @@ Notes:
 - `device.button_gpio` stays at 0. The side button is GPIO 0.
 - The `inputbroker_event_*` values are ignored since 2.7.15. Events are fixed in firmware.
 - A working node shows `Up/down/press GPIO initialized (26, 19, 20)` in its serial log on boot.
+- The joined preset message string is capped at 200 characters and the ringtone at 230, both from the nanopb `max_size` options in the protobufs.
 
 ## Rebuild from source
 

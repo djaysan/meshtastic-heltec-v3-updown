@@ -1,0 +1,34 @@
+{
+  "region": "EU_868",
+  "modemPreset": "LONG_FAST",
+  "toggle": {
+    "enabled": true,
+    "pinUp": 26,
+    "pinDown": 19,
+    "pinPress": 20
+  },
+  "buzzer": {
+    "enabled": true,
+    "pin": 47
+  },
+  "sendBell": true,
+  "tzdef": "CET-1CEST,M3.5.0/2:00:00,M10.4.0/3:00:00",
+  "cannedMessages": [
+    "Roger",
+    "Yes",
+    "No",
+    "Test",
+    "I'm OK",
+    "Need help",
+    "Car trouble",
+    "Heading out now",
+    "Be there soon",
+    "Can you hear me?",
+    "Where are you?",
+    "Signal weak",
+    "Send your location",
+    "Here's my location",
+    "Wait for me",
+    "Call for help"
+  ]
+}

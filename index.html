@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Heltec V3 Toggle Flasher</title>
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+<script type="module" src="dist/configure.js"></script>
 <style>
   :root { color-scheme: light dark; --fg: #1a1a1a; --bg: #fafafa; --muted: #666; --card: #fff; --line: #ddd; --accent: #2a7f62; }
   @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #121212; --muted: #aaa; --card: #1c1c1c; --line: #333; --accent: #4cc39a; } }
@@ -23,6 +24,36 @@
   td, th { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
   th { color: var(--muted); font-weight: 600; }
   a { color: var(--accent); }
+
+  /* Configure form */
+  form { margin: 0; }
+  fieldset { border: 1px solid var(--line); border-radius: 8px; margin: 0 0 14px; padding: 12px 14px; min-width: 0; }
+  legend { color: var(--muted); font-weight: 600; padding: 0 6px; }
+  .field { margin: 0 0 14px; }
+  .field:last-child { margin-bottom: 0; }
+  .field > label { display: block; font-weight: 600; margin-bottom: 4px; }
+  input[type="text"], select, textarea { font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; width: 100%; box-sizing: border-box; }
+  input[type="number"] { font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; width: 6rem; box-sizing: border-box; }
+  textarea { min-height: 10rem; resize: vertical; }
+  input:disabled, select:disabled, textarea:disabled { opacity: .5; }
+  .hint { color: var(--muted); font-size: .875rem; margin: 5px 0 0; }
+  .hint.over { color: #b3261e; font-weight: 600; }
+  .check { display: flex; align-items: center; gap: 8px; font-weight: 600; margin: 0 0 8px; }
+  .check input { width: auto; margin: 0; }
+  .pins { display: flex; flex-wrap: wrap; gap: 14px; }
+  .pins label { display: flex; flex-direction: column; gap: 4px; font-size: .875rem; color: var(--muted); font-weight: 400; }
+  .row { display: flex; gap: 8px; align-items: flex-start; }
+  .row > input { flex: 1 1 auto; }
+  button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--line); padding: 8px 14px; }
+  #cfg-status { list-style: none; margin: 16px 0 0; padding: 0; }
+  #cfg-status .step { display: flex; gap: 8px; padding: 3px 0; color: var(--muted); }
+  #cfg-status .step .mark { flex: none; width: 1.2em; text-align: center; }
+  #cfg-status .running, #cfg-status .done { color: var(--fg); }
+  #cfg-status .done .mark { color: var(--accent); }
+  #cfg-status .error { color: #b3261e; font-weight: 600; }
+  #cfg-status .detail { color: var(--muted); font-weight: 400; }
+  #cfg-result { font-weight: 600; margin-top: 14px; }
+  #cfg-result.ok { color: var(--accent); }
 </style>
 </head>
 <body>
@@ -41,6 +72,184 @@
       <span slot="not-allowed">Open this page over HTTPS.</span>
     </esp-web-install-button>
     <p>Works from any previous version, including 2.6.x, since the bootloader is refreshed along with the app.</p>
+  </section>
+
+  <section>
+    <h2>Configure the node</h2>
+    <p>Send your settings to the node over the same USB cable, no phone app needed. Nothing leaves the browser until you press <strong>Connect and apply</strong>, and every field is remembered so you can run the same settings onto node after node.</p>
+    <p class="hint">Works on any node running Meshtastic 2.6 or newer, flashed from this page or not. Chrome or Edge on desktop.</p>
+
+    <form id="cfg-form">
+      <fieldset>
+        <legend>Radio</legend>
+        <div class="field">
+          <label for="cfg-region">Region</label>
+          <select id="cfg-region">
+            <option value="US">US</option>
+            <option value="EU_433">EU_433</option>
+            <option value="EU_868" selected>EU_868</option>
+            <option value="CN">CN</option>
+            <option value="JP">JP</option>
+            <option value="ANZ">ANZ</option>
+            <option value="KR">KR</option>
+            <option value="TW">TW</option>
+            <option value="RU">RU</option>
+            <option value="IN">IN</option>
+            <option value="NZ_865">NZ_865</option>
+            <option value="TH">TH</option>
+            <option value="LORA_24">LORA_24</option>
+            <option value="UA_433">UA_433</option>
+            <option value="UA_868">UA_868</option>
+            <option value="MY_433">MY_433</option>
+            <option value="MY_919">MY_919</option>
+            <option value="SG_923">SG_923</option>
+            <option value="PH_433">PH_433</option>
+            <option value="PH_868">PH_868</option>
+            <option value="PH_915">PH_915</option>
+            <option value="ANZ_433">ANZ_433</option>
+            <option value="KZ_433">KZ_433</option>
+            <option value="KZ_863">KZ_863</option>
+            <option value="NP_865">NP_865</option>
+            <option value="BR_902">BR_902</option>
+            <option value="ITU1_2M">ITU1_2M</option>
+            <option value="ITU2_2M">ITU2_2M</option>
+            <option value="EU_866">EU_866</option>
+            <option value="EU_874">EU_874</option>
+            <option value="EU_917">EU_917</option>
+            <option value="EU_N_868">EU_N_868</option>
+            <option value="ITU3_2M">ITU3_2M</option>
+            <option value="ITU1_70CM">ITU1_70CM</option>
+            <option value="ITU2_70CM">ITU2_70CM</option>
+            <option value="ITU3_70CM">ITU3_70CM</option>
+            <option value="ITU2_125CM">ITU2_125CM</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cfg-preset">Modem preset</label>
+          <select id="cfg-preset">
+            <option value="LONG_FAST" selected>LONG_FAST</option>
+            <option value="LONG_SLOW">LONG_SLOW</option>
+            <option value="VERY_LONG_SLOW">VERY_LONG_SLOW</option>
+            <option value="MEDIUM_SLOW">MEDIUM_SLOW</option>
+            <option value="MEDIUM_FAST">MEDIUM_FAST</option>
+            <option value="SHORT_SLOW">SHORT_SLOW</option>
+            <option value="SHORT_FAST">SHORT_FAST</option>
+            <option value="LONG_MODERATE">LONG_MODERATE</option>
+            <option value="SHORT_TURBO">SHORT_TURBO</option>
+            <option value="LONG_TURBO">LONG_TURBO</option>
+            <option value="LITE_FAST">LITE_FAST</option>
+            <option value="LITE_SLOW">LITE_SLOW</option>
+            <option value="NARROW_FAST">NARROW_FAST</option>
+            <option value="NARROW_SLOW">NARROW_SLOW</option>
+            <option value="TINY_FAST">TINY_FAST</option>
+            <option value="TINY_SLOW">TINY_SLOW</option>
+            <option value="MEDIUM_TURBO">MEDIUM_TURBO</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Name</legend>
+        <div class="field">
+          <label for="cfg-long-name">Long name</label>
+          <input type="text" id="cfg-long-name" maxlength="39" autocomplete="off" spellcheck="false" placeholder="Leave empty to keep the name on the node">
+        </div>
+        <div class="field">
+          <label for="cfg-short-name">Short name, 4 characters</label>
+          <input type="text" id="cfg-short-name" maxlength="4" autocomplete="off" spellcheck="false" placeholder="Leave empty to keep it">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Channel</legend>
+        <div class="field">
+          <label class="check" for="cfg-channel-keep"><input type="radio" id="cfg-channel-keep" name="cfg-channel-mode" checked> Keep the channels already on the node</label>
+          <label class="check" for="cfg-channel-url-mode"><input type="radio" id="cfg-channel-url-mode" name="cfg-channel-mode"> Paste a channel URL</label>
+        </div>
+        <div class="field">
+          <label for="cfg-channel-url">Channel URL</label>
+          <input type="text" id="cfg-channel-url" autocomplete="off" spellcheck="false" placeholder="https://meshtastic.org/e/#...">
+          <p class="hint">Share the channel set from the phone app and paste the whole link. The first channel in it becomes the primary, the rest become secondary. Its LoRa settings are merged in too.</p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Preset messages</legend>
+        <div class="field">
+          <label for="cfg-messages">One message per line</label>
+          <textarea id="cfg-messages" spellcheck="false">Roger
+Yes
+No
+Test
+I'm OK
+Need help
+Car trouble
+Heading out now
+Be there soon
+Can you hear me?
+Where are you?
+Signal weak
+Send your location
+Here's my location
+Wait for me
+Call for help</textarea>
+          <p class="hint" id="cfg-messages-count" aria-live="polite"></p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Ringtone</legend>
+        <div class="field">
+          <label for="cfg-tune">Tune</label>
+          <select id="cfg-tune">
+            <option value="">Keep the ringtone on the node</option>
+          </select>
+          <p class="hint">Pick one to fill the box below, then edit it if you like.</p>
+        </div>
+        <div class="field">
+          <label for="cfg-ringtone">RTTTL string</label>
+          <div class="row">
+            <input type="text" id="cfg-ringtone" autocomplete="off" spellcheck="false" placeholder="Leave empty to keep the current ringtone">
+            <button type="button" class="secondary" id="cfg-ringtone-preview">Preview</button>
+          </div>
+          <p class="hint" id="cfg-ringtone-count" aria-live="polite"></p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Toggle and buzzer</legend>
+        <div class="field">
+          <label class="check" for="cfg-toggle"><input type="checkbox" id="cfg-toggle" checked> Up/down toggle input</label>
+          <div class="pins">
+            <label for="cfg-pin-up">Up GPIO<input type="number" id="cfg-pin-up" value="26" min="0" max="48" step="1"></label>
+            <label for="cfg-pin-down">Down GPIO<input type="number" id="cfg-pin-down" value="19" min="0" max="48" step="1"></label>
+            <label for="cfg-pin-press">Push GPIO<input type="number" id="cfg-pin-press" value="20" min="0" max="48" step="1"></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="check" for="cfg-buzzer"><input type="checkbox" id="cfg-buzzer" checked> Buzzer on PWM</label>
+          <div class="pins">
+            <label for="cfg-buzzer-pin">Buzzer GPIO<input type="number" id="cfg-buzzer-pin" value="47" min="0" max="48" step="1"></label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="check" for="cfg-send-bell"><input type="checkbox" id="cfg-send-bell" checked> Send a bell with preset messages, so the other node beeps</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Timezone</legend>
+        <div class="field">
+          <label for="cfg-tzdef">POSIX TZ string</label>
+          <input type="text" id="cfg-tzdef" value="CET-1CEST,M3.5.0/2:00:00,M10.4.0/3:00:00" autocomplete="off" spellcheck="false">
+          <p class="hint">Central European time with daylight saving. Leave empty to keep what the node has.</p>
+        </div>
+      </fieldset>
+    </form>
+
+    <button type="button" id="cfg-apply">Connect and apply</button>
+    <ol id="cfg-status" aria-live="polite"></ol>
+    <p id="cfg-result" role="status"></p>
   </section>
 
   <section>
