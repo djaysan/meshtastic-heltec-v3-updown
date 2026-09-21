@@ -182,3 +182,4 @@ The patch touches `variants/esp32s3/heltec_v3/platformio.ini` (one build flag) a
 
 - Case: [Muzi H1 remix by LWC](https://www.printables.com/model/853651-meshtastic-muzi-h1-remix-1100mah-version-no-brandi), remixed from the Muzi Works H1, licensed CC BY-NC-SA 4.0. Not included here, download it from Printables. Photos in this repo are of my own builds.
 - Firmware: derived from [meshtastic/firmware](https://github.com/meshtastic/firmware), GPL-3.0. The patch and binaries here are under the same license.
+- Ringtones: the Meshtastic stock tone, the examples shipped with [NonBlockingRTTTL](https://github.com/end2endzone/NonBlockingRTTTL) (MIT), which is the same player the firmware uses, the [Meshtastic ringtone guide at mtnme.sh](https://mtnme.sh/guides/ringtones/), and Nokia era RTTTL strings in long circulation. Plain alert tones were written for this repo.

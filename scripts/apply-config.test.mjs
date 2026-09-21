@@ -500,6 +500,26 @@ test('a malformed ringtone is rejected with a readable message', () => {
   assert.throws(() => parseRtttl(''), /empty/);
 });
 
+test('every shipped tune matches the grammar the firmware parser accepts', () => {
+  // NonBlockingRtttl walks the header positionally: d=, then o=, then b=,
+  // then the colon. An extra key such as s= desyncs it and the melody plays
+  // as noise. The octave is read as one digit and only 3 to 7 is kept.
+  for (const tune of TUNES) {
+    const parts = tune.rtttl.split(':');
+    assert.equal(parts.length, 3, `${tune.name} should be name:defaults:notes`);
+    const header = /^d=(\d+),o=([3-7]),b=(\d+)$/.exec(parts[1]);
+    assert.ok(header, `${tune.name} has a header the firmware cannot walk: ${parts[1]}`);
+    for (const note of parts[2].split(',')) {
+      // A dot goes before the octave digit, the parser reads it in that order.
+      assert.match(
+        note,
+        /^\d*[cdefgabp]#?\.?[3-7]?$/,
+        `${tune.name} has a note the firmware cannot read: ${note}`,
+      );
+    }
+  }
+});
+
 test('every shipped tune parses and fits the firmware limit', () => {
   assert.ok(TUNES.length >= 12, 'the picker should offer a dozen or more tunes');
   for (const tune of TUNES) {
